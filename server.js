@@ -17,37 +17,55 @@ app.use(express.static('client'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-const games = [];
-
-let gameIdCounter = 1;
-
-app.get('/games/:id', (req, res) => {
-  res.send(req.params.id);
+app.get('/games/:id', (req, res, next) => {
+  Game.findById(req.params.id, (err, game) => {
+    if (err) next(err);
+    else res.send(game);
+  });
 });
 
 app.post('/games', (req, res) => {
-  const game = {
-    id: gameIdCounter.toString(),
-    players: [req.body.player],
-  };
-  gameIdCounter += 1;
-  games.push(game);
-  res.send(req.body);
+  Game.create({ players: [req.body.player] })
+    .then((game) => {
+      res.send(game);
+    });
 });
 
-app.put('/games/:id/addPlayer', (req, res) => {
-  const updatedGame = games[_.findIndex(games, { id: req.params.id })];
-  updatedGame.players.push(req.body.player);
-  res.send();
+app.put('/games/:id/addPlayer', (req, res, next) => {
+  Game.findById(req.params.id, (err, game) => {
+    if (err) next(err);
+    else {
+      game.players.push(req.body.player);
+      game.save((error, updatedGame) => {
+        if (error) next(error);
+        else {
+          res.send(updatedGame);
+        }
+      });
+    }
+  });
 });
 
-app.put('/games/:id/start', (req, res) => {
-  Location.find({})
-    .then((allLocations) => {
-      const updatedGame = games[_.findIndex(games, { id: req.params.id })];
-      updatedGame.startTime = new Date();
-      updatedGame.location = _.sample(allLocations).name;
-      res.send();
+app.put('/games/:id/start', (req, res, next) => {
+  Location.find({}, 'name')
+    .then(allLocations => _.sample(allLocations))
+    .then((randomLocation) => {
+      Game.findByIdAndUpdate(
+        req.params.id,
+        {
+          startTime: new Date(),
+          location: randomLocation,
+        },
+        { new: true },
+      )
+        .populate('location')
+        .exec((err, game) => {
+          if (err) next(err);
+          else {
+            console.log(game);
+            res.send(game);
+          }
+        });
     });
 });
 
