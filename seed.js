@@ -1,4 +1,5 @@
 const Location = require('./locationModel');
+const Game = require('./gameModel');
 
 const locations = [
   { name: 'Airplane' },
@@ -35,5 +36,15 @@ const seedLocations = () => {
   return Promise.all(promises);
 };
 
+const seedGames = () => {
+  const promise = Game.create({ players: ['Benjamin'] });
+  return promise;
+};
+
 Location.remove().exec()
-  .then(seedLocations);
+  .then(seedLocations)
+  .then(seedGames)
+  .then((data) => {
+    console.log(data);
+    console.log('Seeding done');
+  });
