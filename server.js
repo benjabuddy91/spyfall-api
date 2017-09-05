@@ -32,18 +32,14 @@ app.post('/games', (req, res) => {
 });
 
 app.put('/games/:id/addPlayer', (req, res, next) => {
-  Game.findById(req.params.id, (err, game) => {
-    if (err) next(err);
-    else {
+   Game.findById(req.params.id)
+    .then((game) => {
       game.players.push(req.body.player);
-      game.save((error, updatedGame) => {
-        if (error) next(error);
-        else {
-          res.send(updatedGame);
-        }
-      });
-    }
-  });
+      game.save();
+      res.send(game);
+    }, (err) => {
+      res.send(err);
+    })
 });
 
 app.put('/games/:id/start', (req, res, next) => {
@@ -59,12 +55,10 @@ app.put('/games/:id/start', (req, res, next) => {
         { new: true }
       )
         .populate('location')
-        .exec((err, game) => {
-          if (err) next(err);
-          else {
-            console.log(game);
-            res.send(game);
-          }
+        .then((game) => {
+          res.send(game);
+        }, (err) => {
+          next(err);
         });
     });
 });
