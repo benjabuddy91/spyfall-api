@@ -31,14 +31,11 @@ exports.addPlayer = (req, res, next) => {
 
 exports.startGame = (req, res, next) => {
   getRandomLocation()
-    .then(location => Game.findByIdAndUpdate(
-      req.params.id,
-      {
-        startTime: new Date(),
-        location,
-      },
-      { new: true }
-    )
-      .populate('location'))
+    .then((location) => {
+      req.game.startTime = new Date();
+      req.game.location = location;
+      req.game.spy = _.sample(req.game.players);
+      return req.game.save();
+    })
     .then(game => res.send(game), err => next(err));
 };
