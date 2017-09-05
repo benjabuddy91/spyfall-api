@@ -43,24 +43,20 @@ app.put('/games/:id/addPlayer', (req, res, next) => {
 });
 
 app.put('/games/:id/start', (req, res, next) => {
-  Location.find({}, 'name')
-    .then(allLocations => _.sample(allLocations))
-    .then((randomLocation) => {
-      Game.findByIdAndUpdate(
+  Location.count()
+    .then(count => Location.findOne().skip(_.random(0, count)))
+    .then(location => {
+      return Game.findByIdAndUpdate(
         req.params.id,
         {
           startTime: new Date(),
-          location: randomLocation,
+          location: location,
         },
         { new: true }
       )
-        .populate('location')
-        .then((game) => {
-          res.send(game);
-        }, (err) => {
-          next(err);
-        });
-    });
+      .populate('location')
+    })
+    .then(game => res.send(game), err => next(err));
 });
 
 app.listen(3000);
