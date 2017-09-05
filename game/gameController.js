@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-const Location = require('.././locationModel');
+const Location = require('../location/locationModel');
 const Game = require('./gameModel');
 
 const getRandomLocation = () => Location.count()
