@@ -5,13 +5,13 @@ const mongoose = require('mongoose');
 const Location = require('./locationModel');
 const Game = require('./gameModel');
 
-require('./seed.js');
-
 const app = express();
 
 mongoose.connect('mongodb://localhost/spyfallApi', {
   useMongoClient: true,
 });
+
+require('./seed.js');
 
 app.use(express.static('client'));
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -56,7 +56,7 @@ app.put('/games/:id/start', (req, res, next) => {
           startTime: new Date(),
           location: randomLocation,
         },
-        { new: true },
+        { new: true }
       )
         .populate('location')
         .exec((err, game) => {
