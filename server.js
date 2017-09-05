@@ -1,9 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const _ = require('lodash');
 const mongoose = require('mongoose');
-const Location = require('./locationModel');
-const Game = require('./gameModel');
+const gameRouter = require('./game/gameRoutes');
 
 const app = express();
 
@@ -11,53 +9,13 @@ mongoose.connect('mongodb://localhost/spyfallApi', {
   useMongoClient: true,
 });
 
-require('./seed.js');
+require('./util/seed.js');
 
 app.use(express.static('client'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.get('/games/:id', (req, res, next) => {
-  Game.findById(req.params.id, (err, game) => {
-    if (err) next(err);
-    else res.send(game);
-  });
-});
-
-app.post('/games', (req, res) => {
-  Game.create({ players: [req.body.player] })
-    .then((game) => {
-      res.send(game);
-    });
-});
-
-app.put('/games/:id/addPlayer', (req, res, next) => {
-   Game.findById(req.params.id)
-    .then((game) => {
-      game.players.push(req.body.player);
-      game.save();
-      res.send(game);
-    }, (err) => {
-      res.send(err);
-    })
-});
-
-app.put('/games/:id/start', (req, res, next) => {
-  Location.count()
-    .then(count => Location.findOne().skip(_.random(0, count)))
-    .then(location => {
-      return Game.findByIdAndUpdate(
-        req.params.id,
-        {
-          startTime: new Date(),
-          location: location,
-        },
-        { new: true }
-      )
-      .populate('location')
-    })
-    .then(game => res.send(game), err => next(err));
-});
+app.use('/games', gameRouter);
 
 app.listen(3000);
 console.log('Listening on port 3000');

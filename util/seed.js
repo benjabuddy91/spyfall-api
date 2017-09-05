@@ -1,5 +1,5 @@
 const Location = require('./locationModel');
-const Game = require('./gameModel');
+const Game = require('./game/gameModel');
 
 const locations = [
   { name: 'Airplane' },
