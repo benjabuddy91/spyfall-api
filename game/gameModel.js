@@ -5,6 +5,7 @@ const GameSchema = new mongoose.Schema({
   startTime: Date,
   location: { type: mongoose.Schema.Types.ObjectId, ref: 'location' },
   spy: String,
+  accessCode: String
 });
 
 module.exports = mongoose.model('game', GameSchema);

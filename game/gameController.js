@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const cryptoRandomString = require('crypto-random-string');
 
 const Location = require('../location/locationModel');
 const Game = require('./gameModel');
@@ -19,7 +20,7 @@ exports.params = (req, res, next, id) => {
 exports.getOne = (req, res) => res.send(req.game);
 
 exports.createGame = (req, res) => {
-  Game.create({ players: [req.body.player] })
+  Game.create({ players: [req.body.player], accessCode: cryptoRandomString(6).toUpperCase() })
     .then(game => res.send(game));
 };
 
