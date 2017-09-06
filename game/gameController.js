@@ -8,7 +8,7 @@ const getRandomLocation = () => Location.count()
   .then(count => Location.findOne().skip(_.random(0, count)));
 
 exports.params = (req, res, next, id) => {
-  Game.findById(id)
+  Game.find({ accessCode: id })
     .then((game) => {
       req.game = game;
       next();
