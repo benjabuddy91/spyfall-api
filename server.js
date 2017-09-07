@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const mongoose = require('mongoose');
 const gameRouter = require('./game/gameRoutes');
 
@@ -14,7 +15,7 @@ require('./util/seed.js');
 app.use(express.static('client'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
+app.use(cors());
 app.use('/games', gameRouter);
 
 app.listen(3000);
