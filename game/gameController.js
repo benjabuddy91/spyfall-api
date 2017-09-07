@@ -20,7 +20,11 @@ exports.params = (req, res, next, accessCode) => {
 exports.getOne = (req, res) => res.send(req.game);
 
 exports.createGame = (req, res) => {
-  Game.create({ players: [req.body.player], accessCode: cryptoRandomString(6).toUpperCase() })
+  Game.create({
+    players: [req.body.player],
+    host: [req.body.player],
+    accessCode: cryptoRandomString(6).toUpperCase(),
+  })
     .then(game => res.send(game));
 };
 
