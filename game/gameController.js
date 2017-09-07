@@ -8,7 +8,7 @@ const getRandomLocation = () => Location.count()
   .then(count => Location.findOne().skip(_.random(0, count)));
 
 exports.params = (req, res, next, accessCode) => {
-  Game.findOne({ accessCode: accessCode })
+  Game.findOne({ accessCode })
     .then((game) => {
       req.game = game;
       next();
@@ -24,7 +24,7 @@ exports.createGame = (req, res) => {
     .then(game => res.send(game));
 };
 
-exports.addPlayer = (req, res, next) => {
+exports.joinGame = (req, res, next) => {
   req.game.players.push(req.body.player);
   req.game.save()
     .then(game => res.send(game), err => next(err));

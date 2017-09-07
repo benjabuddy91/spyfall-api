@@ -9,7 +9,7 @@ router.route('/:accessCode')
 router.route('/')
   .post(controller.createGame);
 
-router.put('/:accessCode/addPlayer', controller.addPlayer);
+router.put('/:accessCode/join', controller.joinGame);
 
 router.put('/:accessCode/start', controller.startGame);
 
