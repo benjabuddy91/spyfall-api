@@ -1,16 +1,16 @@
 const router = require('express').Router();
 const controller = require('./gameController');
 
-router.param('id', controller.params);
+router.param('accessCode', controller.params);
 
-router.route('/:id')
+router.route('/:accessCode')
   .get(controller.getOne);
 
 router.route('/')
   .post(controller.createGame);
 
-router.put('/:id/addPlayer', controller.addPlayer);
+router.put('/:accessCode/addPlayer', controller.addPlayer);
 
-router.put('/:id/start', controller.startGame);
+router.put('/:accessCode/start', controller.startGame);
 
 module.exports = router;

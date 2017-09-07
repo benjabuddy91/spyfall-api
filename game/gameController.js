@@ -7,8 +7,8 @@ const Game = require('./gameModel');
 const getRandomLocation = () => Location.count()
   .then(count => Location.findOne().skip(_.random(0, count)));
 
-exports.params = (req, res, next, id) => {
-  Game.find({ accessCode: id })
+exports.params = (req, res, next, accessCode) => {
+  Game.findOne({ accessCode: accessCode })
     .then((game) => {
       req.game = game;
       next();
