@@ -4,9 +4,6 @@ const cryptoRandomString = require('crypto-random-string');
 const Location = require('../location/locationModel');
 const Game = require('./gameModel');
 
-const getRandomLocation = () => Location.count()
-  .then(count => Location.findOne().skip(_.random(0, count)));
-
 exports.params = (req, res, next, accessCode) => {
   Game.findOne({ accessCode })
     .then((game) => {
@@ -35,10 +32,11 @@ exports.joinGame = (req, res, next) => {
 };
 
 exports.startGame = (req, res, next) => {
-  getRandomLocation()
-    .then((location) => {
+  Location.find({}).select('name')
+    .then(locations => {
       req.game.startTime = new Date();
-      req.game.location = location;
+      req.game.locations = locations;
+      req.game.location = _.sample(locations);
       req.game.spy = _.sample(req.game.players);
       return req.game.save();
     })
