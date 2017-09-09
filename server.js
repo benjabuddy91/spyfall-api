@@ -10,7 +10,7 @@ mongoose.connect('mongodb://localhost/spyfallApi', {
   useMongoClient: true,
 });
 
-require('./util/seed.js');
+// require('./util/seed.js');
 
 app.use(express.static('client'));
 app.use(bodyParser.urlencoded({ extended: true }));

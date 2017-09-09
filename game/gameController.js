@@ -6,6 +6,9 @@ const Game = require('./gameModel');
 
 exports.params = (req, res, next, accessCode) => {
   Game.findOne({ accessCode })
+    .populate('location')
+    .populate('locations')
+    .exec()
     .then((game) => {
       req.game = game;
       next();
