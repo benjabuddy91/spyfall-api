@@ -33,8 +33,8 @@ exports.joinGame = (req, res, next) => {
 
 exports.startGame = (req, res, next) => {
   Location.find({}).select('name')
-    .then(locations => {
-      req.game.startTime = new Date();
+    .then((locations) => {
+      req.game.startTime = Date.now();
       req.game.locations = locations;
       req.game.location = _.sample(locations);
       req.game.spy = _.sample(req.game.players);
