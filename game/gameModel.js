@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const GameSchema = new mongoose.Schema({
-  players: [{ type: String, unique: true }],
+  players: [{ type: String }],
   startTime: Number,
   location: { type: mongoose.Schema.Types.ObjectId, ref: 'location' },
   locations: [{ type: mongoose.Schema.Types.ObjectId, ref: 'location' }],
