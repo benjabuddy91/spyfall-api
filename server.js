@@ -28,7 +28,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('player-joined', (message) => {
-    io.emit('player-joined', { type: 'new-message', text: message });
+    io.emit('player-joined', message);
     console.log(message);
   });
 
