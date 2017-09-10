@@ -27,8 +27,18 @@ io.on('connection', (socket) => {
     console.log('user disconnected');
   });
 
+  socket.on('player-joined', (message) => {
+    io.emit('player-joined', { type: 'new-message', text: message });
+    console.log(message);
+  });
+
+  socket.on('game-started', (message) => {
+    io.emit('game-started', message);
+    console.log(message);
+  });
+
   socket.on('message', (message) => {
-    io.emit('message', { type: 'new-message', text: message });
+    io.emit('message', message);
     console.log(message);
   });
 });
