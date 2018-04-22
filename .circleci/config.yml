@@ -1,0 +1,18 @@
+version: 2
+jobs:
+  build:
+    parallelism: 1
+    working_directory: ~/circleci-spyfall-api
+    docker:
+      - image: circleci/node:carbon
+
+    steps:
+      - checkout
+
+      - setup_remote_docker
+
+      - run: docker login --username=_ --password=$HEROKU_TOKEN registry.heroku.com
+
+      - run: docker build -t registry.heroku.com/spyfall-api/web .
+
+      - run: docker push registry.heroku.com/spyfall-api/web
