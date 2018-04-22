@@ -9,6 +9,7 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http);
 
 const MONGODB_URI = process.env.MONGODB_URI ? process.env.MONGODB_URI : 'mongodb://localhost/spyfallApi';
+const PORT = process.env.PORT ? process.env.PORT : 3000;
 
 mongoose.connect(MONGODB_URI, {
   useMongoClient: true,
@@ -57,5 +58,5 @@ io.sockets.on('connection', (socket) => {
   });
 });
 
-http.listen(3000);
-console.log('Listening on port 3000');
+http.listen(PORT);
+console.log(`Listening on port ${PORT}`);
