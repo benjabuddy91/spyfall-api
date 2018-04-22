@@ -8,7 +8,9 @@ const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 
-mongoose.connect('mongodb://localhost/spyfallApi', {
+const MONGODB_URI = process.env.MONGODB_URI ? process.env.MONGODB_URI : 'mongodb://localhost/spyfallApi';
+
+mongoose.connect(MONGODB_URI, {
   useMongoClient: true,
 });
 
