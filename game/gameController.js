@@ -10,8 +10,12 @@ exports.params = (req, res, next, accessCode) => {
     .populate('locations')
     .exec()
     .then((game) => {
-      req.game = game;
-      next();
+      if (game) {
+        req.game = game;
+        next();
+      } else {
+        res.status(404).send();
+      }
     }, (err) => {
       next(err);
     });
